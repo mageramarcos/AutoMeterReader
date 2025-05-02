@@ -1,0 +1,62 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: dockerfile
+    ports:
+      - "80:80"
+    environment:
+      NODE_ENV: local
+      PORT: 80
+      DATABASE_URL: postgres://user:password@db:5432/shopper
+      GEMINI_API_KEY: ${GEMINI_API_KEY} # Referência à variável no .env
+    depends_on:
+      db:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+
+  db:
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: shopper
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user -d postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  migrate:
+    image: postgres:latest
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      PGPASSWORD: password
+    volumes:
+      - ./migrations:/migrations
+    entrypoint: >
+      sh -c "
+      echo 'Waiting for database to be ready...';
+      while ! pg_isready -h db -p 5432 -U user; do sleep 2; done;
+      
+      echo 'Checking/Creating database...';
+      if ! psql -h db -U user -d postgres -tc \"SELECT 1 FROM pg_database WHERE datname = 'shopper'\" | grep -q 1; then
+        psql -h db -U user -d postgres -c 'CREATE DATABASE shopper;';
+      fi;
+      
+      echo 'Running migrations...';
+      psql -h db -U user -d shopper -f /migrations/20250428230003_dazzling_tarantula.sql;
+      echo 'Migrations completed successfully!';
+      "
+
+volumes:
+  db_data:

@@ -1,0 +1,46 @@
+{
+	"name": "nota-flow-api",
+	"version": "1.0.0",
+	"description": "A basic node api template",
+	"main": "index.js",
+	"scripts": {
+		"watch": "tsc && (concurrently \"tsc -w\" \"tsc-alias -w\")",
+		"start:dev": "node --watch --env-file=.env dist/servers/index.js",
+		"build": "tsc && tsc-alias",
+		"build:prod": "tsc -p tsconfig.prod.json && tsc-alias",
+		"start": "node --env-file=.env dist/servers/index.js",
+		"lint": "eslint '**/src/**/*.{ts,tsx}' --fix",
+		"db:generate": "drizzle-kit generate",
+		"db:migrate": "drizzle-kit migrate",
+		"db:studio": "drizzle-kit studio",
+		"db:drop": "drizzle-kit drop",
+		"db:seed": "tsx --env-file=.env src/seed.ts",
+		"db:reset": "tsx --env-file=.env src/reset.ts"
+	},
+	"type": "module",
+	"keywords": [],
+	"author": "Specter Labs <contato@specterlabs.com.br>",
+	"license": "ISC",
+	"dependencies": {
+		"@fastify/auth": "4.6.1",
+		"@fastify/cors": "^9.0.1",
+		"@google/genai": "^0.10.0",
+		"axios": "^1.7.9",
+		"brazilian-values": "^0.13.0",
+		"drizzle-orm": "^0.36.1",
+		"fastify": "^4.28.1",
+		"joi": "^17.13.3",
+		"nanoid": "5.0.7",
+		"postgres": "^3.4.4",
+		"yarn": "^1.22.22"
+	},
+	"devDependencies": {
+		"@specter-labs/eslint-config": "^1.0.9",
+		"@types/node": "^22.1.0",
+		"concurrently": "^8.2.2",
+		"drizzle-kit": "^0.28.0",
+		"eslint": "^9.25.1",
+		"tsc-alias": "^1.8.10",
+		"typescript": "^5.5.4"
+	}
+}
