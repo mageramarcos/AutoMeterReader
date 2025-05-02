@@ -15,7 +15,7 @@ Envia uma imagem do medidor em base64 para obter a medição via API do Google G
     "image": "base64",
     "customer_code": "string",
     "measure_datetime": "datetime",
-    "measure_type": "WATER" ou "GAS"
+    "measure_type": " WATER ou GAS "
 }
 ```
 
@@ -38,7 +38,7 @@ Confirma ou corrige o valor lido pelo LLM.
 ```json
 {
     "measure_uuid": "string",
-    "confirmed_value": integer
+    "confirmed_value": "integer"
 }
 ```
 

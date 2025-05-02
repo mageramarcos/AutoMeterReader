@@ -6,7 +6,7 @@ import { listMeterReadings, meterReadingValidation, processMeterReading } from '
 
 export const mensureRoutes = async(fastify: FastifyInstance) => {
 	fastify.post(
-		'/readings',
+		'//upload',
 		applyUseCase(processMeterReading)
 	)
 	fastify.patch(
